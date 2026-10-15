@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fuzzy Logic Traffic Light Controller</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <h1>Fuzzy Logic Traffic Light Controller</h1>
+  <p><strong>Created by:</strong> Jaskirat Singh and Rishi Bhardwaj</p>
+  <hr>
+
+  <div class="main">
+    <!-- Left Column: Simulation and Controls -->
+    <div>
+      <h3>Intersection Simulation</h3>
+      <canvas id="trafficCanvas" width="400" height="400"></canvas>
+      <p>
+        <strong>Signal:</strong> <span id="hud-phase">North-South: GREEN</span> | 
+        <strong>Time Left:</strong> <span id="hud-timer">15s</span>
+      </p>
+
+      <div class="section">
+        <h3>Controls</h3>
+        <p>
+          <button id="btn-pause">Pause</button>
+          <button id="btn-reset">Reset Simulation</button>
+        </p>
+
+        <h4>Traffic Arrival Rates</h4>
+        <p>
+          <label for="slider-ns">North-South Rate: </label>
+          <input type="range" id="slider-ns" min="5" max="50" value="25">
+          <span id="val-ns">25 cars/min</span>
+        </p>
+        <p>
+          <label for="slider-ew">East-West Rate: </label>
+          <input type="range" id="slider-ew" min="5" max="50" value="25">
+          <span id="val-ew">25 cars/min</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Right Column: Fuzzy Logic and Metrics -->
+    <div>
+      <div class="section">
+        <h3>Controller Mode</h3>
+        <p>
+          <label>
+            <input type="radio" name="mode" value="fuzzy" checked> Fuzzy Logic Controller
+          </label>
+          &nbsp;&nbsp;
+          <label>
+            <input type="radio" name="mode" value="fixed"> Fixed Timing (15s)
+          </label>
+        </p>
+      </div>
+
+      <div class="section">
+        <h3>Fuzzy Logic Inference Engine</h3>
+        <p>Currently evaluating: <strong id="fz-dir">North-South</strong></p>
+        <p><strong>Inputs:</strong> <span id="fz-crisp-inputs">Queue = 0 cars, Rate = 25 cars/min</span></p>
+
+        <h4>1. Input Fuzzification (Membership Values)</h4>
+        <table>
+          <tr>
+            <th>Variable</th>
+            <th>Low / Short</th>
+            <th>Medium</th>
+            <th>High / Long</th>
+          </tr>
+          <tr>
+            <td>Queue Length</td>
+            <td id="fz-q-short">0.00</td>
+            <td id="fz-q-med">0.00</td>
+            <td id="fz-q-long">0.00</td>
+          </tr>
+          <tr>
+            <td>Arrival Rate</td>
+            <td id="fz-r-low">0.00</td>
+            <td id="fz-r-med">1.00</td>
+            <td id="fz-r-high">0.00</td>
+          </tr>
+        </table>
+
+        <h4>2. Active Rule</h4>
+        <p id="fz-rule">IF Rate is MED & Queue is SHORT THEN Green = 15s</p>
+        <p>Rule Weight: <span id="fz-rule-weight">1.00</span></p>
+
+        <h4>3. Defuzzified Output</h4>
+        <p>Calculated Green Time: <strong id="fz-output">15 seconds</strong></p>
+      </div>
+
+      <div class="section">
+        <h3>Performance Metrics</h3>
+        <table>
+          <tr>
+            <th>Metric</th>
+            <th>Value</th>
+          </tr>
+          <tr>
+            <td>Average Waiting Time</td>
+            <td><span id="metric-wait">0.0</span> s</td>
+          </tr>
+          <tr>
+            <td>Total Vehicles Cleared</td>
+            <td id="metric-cleared">0</td>
+          </tr>
+          <tr>
+            <td>North-South Queue</td>
+            <td id="stat-ns-queue">0 cars</td>
+          </tr>
+          <tr>
+            <td>East-West Queue</td>
+            <td id="stat-ew-queue">0 cars</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <p><small>Created by Jaskirat Singh and Rishi Bhardwaj</small></p>
+
+  <script src="js/fuzzy.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
